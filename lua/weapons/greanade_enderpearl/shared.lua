@@ -98,21 +98,15 @@ function SWEP:PrimaryAttack()
             timer.Simple(0, function() -- перенос действия в следующий тик
                 self.Owner:SetPos(data.HitPos)
 
-                -- костыль, нет звука fallpain2, не сделать через math.random(1,3)
-                if math.random(1, 2) == 1 then
-                    self:EmitSound('player/pl_fallpain1.wav', 100, 100, 0.2)
-                    self:EmitSound('teleport')
-    
-                else
-                    self:EmitSound('player/pl_fallpain3.wav', 100, 100, 0.2)
-                    self:EmitSound('teleport')
-                end
+                local validSounds = {
+                    'player/pl_fallpain1.wav',
+                    'player/pl_fallpain3.wav'
+                }
 
-
-                ply:SetHealth(ply:Health() - math.random(5, 15))
-                if ply:Health() <= 0 then
-                    ply:Kill()
-                end
+                self:EmitSound(table.Random(validSounds), 100, 100, 0.2)
+                self:EmitSound('teleport')
+                
+                ply:TakeDamage(math.random(5, 15))
                 
             end)
         end)
